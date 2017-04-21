@@ -8,7 +8,7 @@
     #环境搭建过程就不介绍了，网上有很多资源。主要介绍一下本人的开发环境：<br/>
          linux系统：centos7.2<br/>
          php版本：php7<br/>
-         当然要用高性能、高并发通信引擎：swoole2 (详情：https://github.com/swoole/swoole-src)<br/>
+         当然要用高性能、高并发通信引擎：swoole2  #详情：https://github.com/swoole/swoole-src<br/>
          数据库：mariadb<br/>
 
 

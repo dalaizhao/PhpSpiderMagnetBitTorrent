@@ -1,17 +1,17 @@
-PHP编写的DHT爬虫
+PHP编写的DHT网络爬虫     
 
-#参考github的地址附上：https://github.com/greensea/rssindexer
+查看和收集磁力链接和种子，并分析当前热门为目的，当然少不了证明 PHP是世界上最好的语言 ^_^
+
+磁力搜索站点：www.imdalai.com
+
+###附上参考项目地址：https://github.com/greensea/rssindexer
+
+1.开发环境介绍
+    首先介绍一下本人的开发环境：
+      centos7.2
+      php7
+      swoole2
+      mariadb.
 
 
-可自动加入DHT网络并获取到info_hash信息，获取速率当前大概半分钟到一分钟一个hash
-
-使用方法：
-
-1. 安装PHP，请安装新版本
-2. 安装swoole扩展
-3. 运行命令启动
-
-```
-php dht.php
-```
 

@@ -7,7 +7,7 @@
 ###附上参考项目地址：https://github.com/greensea/rssindexer
 
 <h3>1.开发环境介绍</h3>
-    #环境搭建过程就不介绍了，网上有很多资源。<br/>
+    #环境搭建过程就不介绍了，网上有很多资源。
     
     介绍一下本人的开发环境：<br/>
          linux系统：centos7.2<br/>

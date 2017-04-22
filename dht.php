@@ -2,7 +2,8 @@
 // 文件路径
 define('ABSPATH', dirname(__FILE__));
 // 主进程数, 一般为CPU的1至4倍
-define('WORKER_NUM', 4);
+
+define('WORKER_NUM',1 );
 // 允许最大连接数, 不可大于系统ulimit -n的值
 define('MAX_REQUEST', 10000);
 // 线程数
@@ -38,13 +39,15 @@ $bootstrap_nodes = array(
     array('router.bittorrent.com', 6881),
     array('dht.transmissionbt.com', 6881),
     array('router.utorrent.com', 6881),
-    //array('208.67.16.113', 8000),
+    array('208.67.16.113', 8000),
     array('open.acgtracker.com', 1096),
     //array('t2.popgo.org', 7456),
 );
 
+//echo "start";
+date_default_timezone_set("Asia/Shanghai");
 //LOGI("DHT 爬虫服务启动");
-fwrite($file,"DHT网络爬虫启动 rn");
+fwrite($file,"DHT网络爬虫启动 时间: ".date("y-m-d  h:i:sa")."\n");
 
 $serv = new swoole_server('0.0.0.0', 9501, SWOOLE_PROCESS, SWOOLE_SOCK_UDP);
 $serv->set(array(
@@ -54,10 +57,13 @@ $serv->set(array(
     'dispatch_mode' => 2,
     'log_file' => '/dev/null'
 ));
+
+
 $serv->on('WorkerStart', function($serv, $worker_id){
     // 添加一个定时器, 使服务器定时寻找节点
-    $serv->addtimer(AUTO_FIND_TIME);
-    auto_find_node();
+ //   $serv->addtimer(AUTO_FIND_TIME);
+	swoole_timer_tick(10000,function(){
+    auto_find_node();});
 });
 $serv->on('Receive', function($serv, $fd, $from_id, $data){
     // 检查数据长度
@@ -88,7 +94,13 @@ $serv->on('Receive', function($serv, $fd, $from_id, $data){
     }
 });
 
-$serv->on('Timer', function($interval){
+echo "before Timer";
+$foo=$serv->start();
+//$serv->on('Timer', function($interval){
+
+
+
+swoole_timer_tick(10000,function($interval){
     for($i=0; $i<MAX_PROCESS; $i++){
         $process = new swoole_process(function(){
             auto_find_node();
@@ -99,17 +111,17 @@ $serv->on('Timer', function($interval){
     }
 });
 
-$foo = $serv->start();
-
+//$foo = $serv->start();
 
 /**
  * 自动查找节点方法, 将在DHT网络中自动搜寻节点信息
  * @return void
  */
 function auto_find_node(){
-    global $table;
+    global $table , $file;
 
     //write(date('Y-m-d H:i:s', time()) . " auto_find_node\n");
+//fwrite($file,"auto_find_node 时间: ".date("y-m-d  h:i:sa")."\n");
 
     // 如果路由表中没有数据则先加入DHT网络
     if(count($table) == 0)
@@ -130,9 +142,11 @@ function auto_find_node(){
  * @return void
  */
 function join_dht(){
-    global $table, $bootstrap_nodes;
+    global $table, $bootstrap_nodes,$file;
 
     //write(date('Y-m-d H:i:s', time()) . " join_dht\n");
+
+//fwrite($file,"join_dht 时间: ".date("y-m-d  h:i:sa")."\n");
 
     // 循环操作
     foreach($bootstrap_nodes as $node){
@@ -148,9 +162,11 @@ function join_dht(){
  * @return void
  */
 function find_node($address, $id = null){
-    global $nid, $table;
+    global $nid, $table , $file;
 
     //write(date('Y-m-d H:i:s', time()) . " find_node\n");
+
+//fwrite($file,"find_node 时间: ".date("y-m-d  h:i:sa")."\n");
 
     // 若未指定id则使用自身node id
     if(is_null($id))
@@ -182,7 +198,9 @@ function find_node($address, $id = null){
  */
 function request_action($msg, $address){
     //write(date('Y-m-d H:i:s', time()) . " request_action: {$msg['q']}\n");
-    
+      global $file ;
+//fwrite($file,"request_action 时间: ".date("y-m-d  h:i:sa")."\n");
+
     switch($msg['q']){
         case 'ping':
             on_ping($msg, $address);
@@ -231,9 +249,11 @@ function response_action($msg, $address){
  * @return void
  */
 function on_ping($msg, $address){
-    global $nid;
+    global $nid ,$file ;
     
     //write(date('Y-m-d H:i:s', time()) . " on_ping\n");
+
+//fwrite($file,"on-ping 时间: ".date("y-m-d  h:i:sa")."\n");
 
     // 获取对端node id
     $id = $msg['a']['id'];
@@ -259,9 +279,11 @@ function on_ping($msg, $address){
  * @return void
  */
 function on_find_node($msg, $address){
-    global $nid;
+    global $nid , $file;
     
     //write(date('Y-m-d H:i:s', time()) . " on_find_node\n");
+
+//fwrite($file,"on_find_node 时间: ".date("y-m-d  h:i:sa")."\n");
 
     // 获取node列表
     $nodes = get_nodes(16);
@@ -290,7 +312,9 @@ function on_find_node($msg, $address){
  * @return void
  */
 function on_get_peers($msg, $address){
-    global $nid;
+    global $nid , $file;
+
+//fwrite($file,"on_get_peers 时间: ".date("y-m-d  h:i:sa")."\n");
 
     //write(date('Y-m-d H:i:s', time()) . " on_get_peers\n");
 
@@ -347,7 +371,7 @@ function on_announce_peer($msg, $address){
         
         $nodeid = bin2hex($id);
         //LOGI("(node_id={$nodeid}) 获取到info_hash: " . strtoupper(bin2hex($infohash)));
-        fwrite($file,"(node_id={$nodeid}) 获取到info_hash: " . strtoupper(bin2hex($infohash))."rn");
+        fwrite($file,"(node_id={$nodeid}) 获取到info_hash: " . strtoupper(bin2hex($infohash))."  ".date("y-m-d  h:i:sa")."\n");
         
         //logDHTAnnouncePeer($nodeid, bin2hex($infohash));
     }
@@ -372,18 +396,18 @@ function on_announce_peer($msg, $address){
  * @return void
  */
 function send_response($msg, $address){
-    global $serv;
+    global $serv, $file ;
 
     if (filter_var($address[0], FILTER_VALIDATE_IP) === FALSE) {
         
         $ip = gethostbyname($address[0]);
         if (strcmp($ip, $address[0]) !== 0) {
            // LOGW("{$address[0]} 不是一个有效的 IP 地址，将其作为域名解析得到 IP {$ip}");
-            fwrite($file,"{$address[0]} 不是一个有效的 IP 地址，将其作为域名解析得到 IP {$ip}"."rn");
+            fwrite($file,"{$address[0]} 不是一个有效的 IP 地址，将其作为域名解析得到 IP {$ip} ".date("y-m-d  h:i:sa")."\n");
             $address[0] = $ip;
         }
         else {
-            fwrite($file,"{$address[0]} 不是一个有效的 IP 地址，且将其当作域名解析失败"."rn");
+            fwrite($file,"{$address[0]} 不是一个有效的 IP 地址，且将其当作域名解析失败 ".date("y-m-d  h:i:sa")."\n");
             //LOGW("{$address[0]} 不是一个有效的 IP 地址，且将其当作域名解析失败");
         }
     }
@@ -432,5 +456,4 @@ function get_nodes($len = 8){
 
     return $nodes;
 }
-//关闭文件流
-fclose($file);
+

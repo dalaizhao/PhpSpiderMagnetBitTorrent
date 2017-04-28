@@ -17,7 +17,7 @@ require_once ABSPATH . '/inc/Node.class.php';
 require_once ABSPATH . '/inc/Bencode.class.php';
 require_once ABSPATH . '/inc/Base.class.php';
 
-//require_once(__DIR__ . '/../header.php');
+require_once(__DIR__ . '/header.php');
 
 // 保存swoole_server对象
 $serv = NULL;
@@ -39,14 +39,14 @@ $bootstrap_nodes = array(
     array('dht.transmissionbt.com', 6881),
     array('router.utorrent.com', 6881),
     array('208.67.16.113', 8000),
-    array('open.acgtracker.com', 1096),
+    //array('open.acgtracker.com', 1096),
     //array('t2.popgo.org', 7456),
 );
 
 //设置为北京时间
 date_default_timezone_set("Asia/Shanghai");
 
-fwrite($file, "DHT网络爬虫启动 时间:" . date("y-m-d h:i:sa") . "\n");
+//fwrite($file, "DHT网络爬虫启动 时间:" . date("y-m-d h:i:sa") . "\n");
 
 $serv = new swoole_server('0.0.0.0', 9501, SWOOLE_PROCESS, SWOOLE_SOCK_UDP);
 $serv->set(array(
@@ -60,11 +60,9 @@ $serv->set(array(
 
 $serv->on('WorkerStart', function ($serv, $worker_id) {
     // 添加一个定时器, 使服务器定时寻找节点
-    //$serv->addtimer(AUTO_FIND_TIME);
     swoole_timer_tick(10000, function () {
         auto_find_node();
-    }
-    );
+    });
 });
 $serv->on('Receive', function ($serv, $fd, $from_id, $data) {
     // 检查数据长度
@@ -94,10 +92,9 @@ $serv->on('Receive', function ($serv, $fd, $from_id, $data) {
     }
 });
 
-//echo "before Timer";
+
 //启动服务器
 $foo = $serv->start();
-//$serv->on('Timer', function($interval){
 
 swoole_timer_tick(10000, function ($interval) {
     for ($i = 0; $i < MAX_PROCESS; $i++) {
@@ -110,7 +107,6 @@ swoole_timer_tick(10000, function ($interval) {
     }
 });
 
-//$foo = $serv->start();
 
 /**
  * 自动查找节点方法, 将在DHT网络中自动搜寻节点信息
@@ -119,10 +115,7 @@ swoole_timer_tick(10000, function ($interval) {
  */
 function auto_find_node()
 {
-    global $table, $file;
-
-    //write(date('Y-m-d H:i:s', time()) . " auto_find_node\n");
-    //fwrite($file,"auto_find_node 时间: ".date("y-m-d  h:i:sa")."\n");
+    global $table;
 
     // 如果路由表中没有数据则先加入DHT网络
     if (count($table) == 0)
@@ -134,7 +127,7 @@ function auto_find_node()
         $node = array_shift($table);
         // 发送查找find_node到node中
         find_node(array($node->ip, $node->port), $node->nid);
-        sleep(0.005);
+        //sleep(0.005);
     }
 }
 
@@ -145,11 +138,7 @@ function auto_find_node()
  */
 function join_dht()
 {
-    global $table, $bootstrap_nodes, $file;
-
-    //write(date('Y-m-d H:i:s', time()) . " join_dht\n");
-
-//fwrite($file,"join_dht 时间: ".date("y-m-d  h:i:sa")."\n");
+    global $table, $bootstrap_nodes;
 
     // 循环操作
     foreach ($bootstrap_nodes as $node) {
@@ -168,11 +157,7 @@ function join_dht()
  */
 function find_node($address, $id = null)
 {
-    global $nid, $table, $file;
-
-    //write(date('Y-m-d H:i:s', time()) . " find_node\n");
-
-//fwrite($file,"find_node 时间: ".date("y-m-d  h:i:sa")."\n");
+    global $nid, $table;
 
     // 若未指定id则使用自身node id
     if (is_null($id))
@@ -206,10 +191,6 @@ function find_node($address, $id = null)
  */
 function request_action($msg, $address)
 {
-    //write(date('Y-m-d H:i:s', time()) . " request_action: {$msg['q']}\n");
-    global $file;
-//fwrite($file,"request_action 时间: ".date("y-m-d  h:i:sa")."\n");
-
     switch ($msg['q']) {
         case 'ping':
             on_ping($msg, $address);
@@ -264,11 +245,7 @@ function response_action($msg, $address)
  */
 function on_ping($msg, $address)
 {
-    global $nid, $file;
-
-    //write(date('Y-m-d H:i:s', time()) . " on_ping\n");
-
-//fwrite($file,"on-ping 时间: ".date("y-m-d  h:i:sa")."\n");
+    global $nid;
 
     // 获取对端node id
     $id = $msg['a']['id'];
@@ -297,11 +274,7 @@ function on_ping($msg, $address)
  */
 function on_find_node($msg, $address)
 {
-    global $nid, $file;
-
-    //write(date('Y-m-d H:i:s', time()) . " on_find_node\n");
-
-//fwrite($file,"on_find_node 时间: ".date("y-m-d  h:i:sa")."\n");
+    global $nid;
 
     // 获取node列表
     $nodes = get_nodes(16);
@@ -335,10 +308,6 @@ function on_get_peers($msg, $address)
 {
     global $nid, $file;
 
-//fwrite($file,"on_get_peers 时间: ".date("y-m-d  h:i:sa")."\n");
-
-    //write(date('Y-m-d H:i:s', time()) . " on_get_peers\n");
-
     // 获取info_hash信息
     $infohash = $msg['a']['info_hash'];
     // 获取node id
@@ -354,7 +323,14 @@ function on_get_peers($msg, $address)
             'token' => substr($infohash, 0, 2)
         )
     );
+    try{
+         $conn=getMysqlConn();
+         insert($conn,$infohash);
 
+    }catch(Exception $e){
+         fwrite($file, "插入数据库失败！ info_hash: " . $infohash . "  " . date("y-m-d  h:i:sa") . "\n");
+    }
+    
     // 将node加入路由表
     append(new Node($id, $address[0], $address[1]));
     // 向对端发送回复数据
@@ -395,8 +371,14 @@ function on_announce_peer($msg, $address)
 
         $nodeid = bin2hex($id);
         //LOGI("(node_id={$nodeid}) 获取到info_hash: " . strtoupper(bin2hex($infohash)));
-        fwrite($file, "info_hash: " . strtoupper(bin2hex($infohash)) . "  " . date("y-m-d  h:i:sa") . "\n");
+       
+        try{
+             $conn=getMysqlConn();
+             insert($conn,strtoupper(bin2hex($infohash)));
 
+        }catch(Exception $e){
+              fwrite($file, "info_hash: " . strtoupper(bin2hex($infohash)) . "  " . date("y-m-d  h:i:sa") . "\n");
+        }
         //logDHTAnnouncePeer($nodeid, bin2hex($infohash));
     }
 
@@ -429,16 +411,16 @@ function send_response($msg, $address)
 
         $ip = gethostbyname($address[0]);
         if (strcmp($ip, $address[0]) !== 0) {
-            // LOGW("{$address[0]} 不是一个有效的 IP 地址，将其作为域名解析得到 IP {$ip}");
-            fwrite($file, "{$address[0]} 不是一个有效的 IP 地址，将其作为域名解析得到 IP {$ip} " . date("y-m-d  h:i:sa") . "\n");
+           // fwrite($file, "{$address[0]} 不是一个有效的 IP 地址，将其作为域名解析得到 IP {$ip} " . date("y-m-d  h:i:sa") . "\n");
             $address[0] = $ip;
         } else {
-            fwrite($file, "{$address[0]} 不是一个有效的 IP 地址，且将其当作域名解析失败 " . date("y-m-d  h:i:sa") . "\n");
-            //LOGW("{$address[0]} 不是一个有效的 IP 地址，且将其当作域名解析失败");
+           // fwrite($file, "{$address[0]} 不是一个有效的 IP 地址，且将其当作域名解析失败 " . date("y-m-d  h:i:sa") . "\n");
         }
+    }else{
+        $serv->sendto($address[0], $address[1], Base::encode($msg));
     }
 
-    $serv->sendto($address[0], $address[1], Base::encode($msg));
+    
 }
 
 /**

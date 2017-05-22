@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="MySQL - PhpSpider_Magnet2BitTorrent@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
+    <schema id="1" name="phpspider_magnet2bittorrent">
+      <visible>1</visible>
+    </schema>
+    <schema id="2" name="database01"/>
+    <schema id="3" name="db_hibernate"/>
+    <schema id="4" name="db_hotel1"/>
+    <schema id="5" name="db_shop"/>
+    <schema id="6" name="db_user"/>
+    <schema id="7" name="file_storage"/>
+    <schema id="8" name="hotel"/>
+    <schema id="9" name="information_schema"/>
+    <schema id="10" name="myeclipse"/>
+    <schema id="11" name="mysql"/>
+    <schema id="12" name="performance_schema"/>
+    <schema id="13" name="phpex"/>
+    <schema id="14" name="school"/>
+    <schema id="15" name="shopyici"/>
+    <schema id="16" name="sts"/>
+    <table id="17" parent="1" name="infohash_table"/>
+    <column id="18" parent="17" name="info_id">
+      <mandatory>1</mandatory>
+      <data-type>int(10) unsigned|0</data-type>
+      <sequence-identity>1</sequence-identity>
+    </column>
+    <column id="19" parent="17" name="infohash">
+      <mandatory>1</mandatory>
+      <data-type>char(40)|0</data-type>
+    </column>
+    <column id="20" parent="17" name="createtime">
+      <mandatory>1</mandatory>
+      <data-type>timestamp|0</data-type>
+      <default-expression>CURRENT_TIMESTAMP</default-expression>
+    </column>
+    <index id="21" parent="17" name="infohash">
+      <columns>infohash</columns>
+      <desc-columns></desc-columns>
+    </index>
+    <key id="22" parent="17" name="PRIMARY">
+      <columns>info_id</columns>
+      <primary>1</primary>
+    </key>
+  </database-model>
+</dataSource>

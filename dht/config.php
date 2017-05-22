@@ -8,9 +8,9 @@
  * MySQL 数据库连接信息
  */
 $DB_HOST = 'localhost';
-$DB_USER = '';
-$DB_PASSWORD = '';
-$DB_DATABASE = 'PhpSpider_Magnet2BitTorrent';
+$DB_USER = 'root';
+$DB_PASSWORD = 'root';
+$DB_DATABASE = 'phpspiderdht';
 
 
 

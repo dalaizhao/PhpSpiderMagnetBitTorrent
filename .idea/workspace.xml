@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b893e68b-ef37-4457-867f-d6a74029a1a9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dht/sendEmail.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sql/sql_infohash.sql" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dht/SQL_Statement.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/infohash.log" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dht/config.php" afterPath="$PROJECT_DIR$/dht/config.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dht/dht.php" afterPath="$PROJECT_DIR$/dht/dht.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dht/sqlUtil.php" afterPath="$PROJECT_DIR$/dht/sqlUtil.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dht_readme.md" afterPath="$PROJECT_DIR$/dht_readme.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dht/README.md" afterPath="$PROJECT_DIR$/dht/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dht/infohash.log" afterPath="$PROJECT_DIR$/dht/infohash.log" />
     </list>
     <ignored path="PhpSpider_Magnet-BitTorrent.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -60,8 +51,8 @@
       <file leaf-file-name="dht.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dht/dht.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1331">
-              <caret line="410" column="0" selection-start-line="410" selection-start-column="0" selection-end-line="410" selection-end-column="0" />
+            <state relative-caret-position="4895">
+              <caret line="359" column="0" selection-start-line="359" selection-start-column="0" selection-end-line="359" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -297,12 +288,12 @@
       <updated>1493442842756</updated>
       <workItem from="1493442844217" duration="6213000" />
       <workItem from="1493947986387" duration="109000" />
-      <workItem from="1495451738430" duration="4607000" />
+      <workItem from="1495451738430" duration="4838000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10929000" />
+    <option name="totallyTimeSpent" value="11160000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="0" width="1378" height="754" extended-state="0" />
@@ -483,8 +474,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dht/dht.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1331">
-          <caret line="410" column="0" selection-start-line="410" selection-start-column="0" selection-end-line="410" selection-end-column="0" />
+        <state relative-caret-position="4895">
+          <caret line="359" column="0" selection-start-line="359" selection-start-column="0" selection-end-line="359" selection-end-column="0" />
           <folding />
         </state>
       </provider>

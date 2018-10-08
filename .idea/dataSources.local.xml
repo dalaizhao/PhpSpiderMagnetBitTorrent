@@ -2,15 +2,16 @@
 <project version="4">
   <component name="dataSourceStorageLocal">
     <data-source name="MySQL - PhpSpider_Magnet2BitTorrent@localhost" uuid="bf1d3435-ff6b-4307-a34e-19f091aafb3a">
-      <database-info product="MySQL" version="5.6.24-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+      <database-info product="MySQL" version="5.6.24-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )" family="MYSQL" exact-version="5.6.24">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
       <secret-storage>master_key</secret-storage>
       <user-name>root</user-name>
-      <introspection-scope>PhpSpider_Magnet2BitTorrent:</introspection-scope>
+      <introspection-schemas>*:phpspider_magnet2bittorrent|PhpSpider_Magnet2BitTorrent:</introspection-schemas>
       <resolve-scope>PhpSpider_Magnet2BitTorrent:</resolve-scope>
+      <unqualified-resolve-schemas>PhpSpider_Magnet2BitTorrent:</unqualified-resolve-schemas>
     </data-source>
   </component>
 </project>

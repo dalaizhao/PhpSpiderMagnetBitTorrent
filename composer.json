@@ -1,0 +1,14 @@
+{
+  "name": "dht/spider",
+  "description": "dht-spider",
+  "version": "1.0.0",
+  "require": {
+    "monolog/monolog": "1.23.0",
+    "phpmailer/phpmailer": "^6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}

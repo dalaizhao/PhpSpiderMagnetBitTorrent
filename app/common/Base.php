@@ -1,4 +1,7 @@
 <?php
+
+namespace app\common;
+
 /**
  * 基础操作类
  */

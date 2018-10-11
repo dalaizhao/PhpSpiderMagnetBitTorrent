@@ -4,6 +4,7 @@ namespace app\server;
 
 
 use app\common\Base;
+use app\common\DhtConst;
 use app\common\Node;
 
 class DhtService
@@ -11,6 +12,7 @@ class DhtService
 
     /**  设置自身node id*/
     protected $node_id;
+    protected $routing_table = [];
 
     public function __construct()
     {
@@ -23,17 +25,15 @@ class DhtService
      */
     function auto_find_node()
     {
-        global $table;
-
-        // 如果路由表中没有数据则先加入DHT网络
-        if (count($table) == 0)
+        /** 如果路由表中没有数据则先加入DHT网络*/
+        if (count($this->routing_table) == 0)
             return $this->join_dht();
 
-        // 循环处理路由表
-        while (count($table)) {
-            // 从路由表中删除第一个node并返回被删除的node
-            $node = array_shift($table);
-            // 发送查找find_node到node中
+        /** 循环处理路由表 */
+        while (count($this->routing_table)) {
+            /** 从路由表中删除第一个node并返回被删除的node */
+            $node = array_shift($this->routing_table);
+            /** 发送查找find_node到node中*/
             $this->find_node(array($node->ip, $node->port), $node->nid);
         }
     }
@@ -44,11 +44,8 @@ class DhtService
      */
     function join_dht()
     {
-        global $table, $bootstrap_nodes;
-
-        // 循环操作
-        foreach ($bootstrap_nodes as $node) {
-            // 将node域名解析为IP地址, 并发送find_node请求
+        foreach (DhtConst::$bootstrap_nodes as $node) {
+            /** 将node域名解析为IP地址, 并发送find_node请求*/
             $this->find_node(array(gethostbyname($node[0]), $node[1]));
         }
     }
@@ -61,27 +58,24 @@ class DhtService
      */
     function find_node($address, $id = null)
     {
-        global $nid;
-
-        // 若未指定id则使用自身node id
-        if (is_null($id))
-            $mid = $nid;
-        else
-            // 否则伪造一个相邻id
-            $mid = Base::get_neighbor($id, $nid);
-
-        // 定义发送数据
+        /** 若未指定id则使用自身node id，否侧伪造邻居节点*/
+        if (is_null($id)) {
+            $mid = $this->node_id;
+        } else {
+            $mid = Base::get_neighbor($id, $this->node_id);
+        }
+        /** 定义发送数据*/
         $msg = array(
             't' => Base::entropy(2),
             'y' => 'q',
             'q' => 'find_node',
             'a' => array(
-                'id'     => $nid,
+                'id'     => $this->node_id,
                 'target' => $mid
             )
         );
 
-        // 发送请求数据到对端
+        /** 发送请求数据到对端*/
         $this->send_response($msg, $address);
     }
 
@@ -272,14 +266,13 @@ class DhtService
 
     /**
      * 向对端发送数据
+     * @param        $serv
      * @param  array $msg     要发送的数据
      * @param  array $address 对端链接信息
      * @return void
      */
-    function send_response($msg, $address)
+    function send_response($serv, $msg, $address)
     {
-        global $serv, $file;
-
         if (filter_var($address[0], FILTER_VALIDATE_IP) === false) {
 
             $ip = gethostbyname($address[0]);

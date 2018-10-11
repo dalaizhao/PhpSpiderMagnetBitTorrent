@@ -24,5 +24,16 @@ php版本：php7.1.4
 目前忙于实习，本系统也是处于未完善状态，不过收集hashInfo倒是完善的（见dht文件夹），其它异步数据库、和bt下载都出与未完善阶段。那天抽空再完善整个系统。  谢谢，鼓励！  
 
 
+### 运行
 
+使用方法：
+
+1. 安装PHP，请安装新版本
+2. 安装swoole扩展
+3. 运行命令启动
+
+```
+php app/server/ServerService.php
+```
+linux环境下后台运行命令： <h4>nohup php app/server/ServerService.php &</h4> 
 

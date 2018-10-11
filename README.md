@@ -21,10 +21,8 @@ php版本：php7.1.4
 
 [DHT协议解析](https://github.com/dalaizhao/PhpSpider_Magnet-BitTorrent/blob/master/dht_readme.md)   
 
-目前忙于实习，本系统也是处于未完善状态，不过收集hashInfo倒是完善的（见dht文件夹），其它异步数据库、和bt下载都出与未完善阶段。那天抽空再完善整个系统。  谢谢，鼓励！  
 
-
-### 运行
+### 4.运行
 
 使用方法：
 

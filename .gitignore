@@ -1,2 +1,8 @@
-/vendor/
 .idea
+*.php.swp
+*.php.un~
+*.php.bak
+.buildpath
+.project
+.settings/
+/node_modules/

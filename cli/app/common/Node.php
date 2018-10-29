@@ -2,29 +2,25 @@
 
 namespace SurgicalFruit\common;
 
-/**
- * Node 模型
- */
 class Node
 {
     /**
      * 保存node id
      * @var string
      */
-    private $nid;
+    public $node_id;
     /**
      * 保存IP地址
      * @var string
      */
-    private $ip;
+    public $ip;
     /**
      * 保存端口号
      * @var integer
      */
-    private $port;
+    public $port;
 
     /**
-     * 析构方法, 初始化模型
      * @param string  $nid  node id
      * @param string  $ip   IP地址
      * @param integer $port 端口号
@@ -32,7 +28,7 @@ class Node
      */
     public function __construct($nid, $ip, $port)
     {
-        $this->nid  = $nid;
+        $this->node_id  = $nid;
         $this->ip   = $ip;
         $this->port = $port;
     }
@@ -78,6 +74,6 @@ class Node
      */
     public function to_array()
     {
-        return array('nid' => $this->nid, 'ip' => $this->ip, 'port' => $this->port);
+        return array('nid' => $this->node_id, 'ip' => $this->ip, 'port' => $this->port);
     }
 }

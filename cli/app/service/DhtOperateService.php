@@ -2,6 +2,9 @@
 
 namespace SurgicalFruit\service;
 
+use SurgicalFruit\common\Node;
+use SurgicalFruit\common\ServerConst;
+
 class DhtOperateService extends BaseService
 {
 
@@ -11,7 +14,7 @@ class DhtOperateService extends BaseService
 
     public function __construct()
     {
-        $this->node_id = self::get_node_id();
+        $this->node_id = $this->get_node_id();
     }
 
     /**
@@ -39,7 +42,7 @@ class DhtOperateService extends BaseService
      */
     function join_dht()
     {
-        foreach (DhtConst::$bootstrap_nodes as $node) {
+        foreach (ServerConst::$bootstrap_nodes as $node) {
             /** 将node域名解析为IP地址, 并发送find_node请求*/
             $this->find_node(array(gethostbyname($node[0]), $node[1]));
         }
@@ -57,11 +60,11 @@ class DhtOperateService extends BaseService
         if (is_null($id)) {
             $mid = $this->node_id;
         } else {
-            $mid = Base::get_neighbor($id, $this->node_id);
+            $mid = $this->get_neighbor($id, $this->node_id);
         }
         /** 定义发送数据*/
         $msg = array(
-            't' => Base::entropy(2),
+            't' => $this->entropy(2),
             'y' => 'q',
             'q' => 'find_node',
             'a' => array(
@@ -115,7 +118,7 @@ class DhtOperateService extends BaseService
             return false;
 
         // 对nodes数据进行解码
-        $nodes = Base::decode_nodes($msg['r']['nodes']);
+        $nodes = $this->decode_nodes($msg['r']['nodes']);
 
         // 对nodes循环处理
         foreach ($nodes as $node) {
@@ -171,7 +174,7 @@ class DhtOperateService extends BaseService
             'y' => 'r',
             'r' => array(
                 'id'    => $nid,
-                'nodes' => Base::encode_nodes($nodes)
+                'nodes' => $this->encode_nodes($nodes)
             )
         );
 
@@ -202,7 +205,7 @@ class DhtOperateService extends BaseService
             'y' => 'r',
             'r' => array(
                 'id'    => $nid,
-                'nodes' => Base::encode_nodes(get_nodes()),
+                'nodes' => $this->encode_nodes(get_nodes()),
                 'token' => substr($infohash, 0, 2)
             )
         );
@@ -290,11 +293,11 @@ class DhtOperateService extends BaseService
         global $nid, $table;
 
         // 检查node id是否正确
-        if (!isset($node->nid[19]))
+        if (!isset($node->node_id[19]))
             return false;
 
         // 检查是否为自身node id
-        if ($node->nid == $nid)
+        if ($node->node_id == $nid)
             return false;
 
         // 检查node是否已存在

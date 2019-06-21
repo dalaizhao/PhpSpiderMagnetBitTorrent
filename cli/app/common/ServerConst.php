@@ -23,8 +23,6 @@ class ServerConst
         array('router.bittorrent.com', 6881),
         array('dht.transmissionbt.com', 6881),
         array('router.utorrent.com', 6881),
-        array('208.67.16.113', 8000)
-        //array('open.acgtracker.com', 1096),
-        //array('t2.popgo.org', 7456),
+        array('208.67.16.113', 8000),
     );
 }
